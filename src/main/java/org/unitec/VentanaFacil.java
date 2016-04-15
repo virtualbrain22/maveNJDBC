@@ -7,6 +7,7 @@ package org.unitec;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.sql.*;
 
 /**
  *
@@ -32,7 +33,7 @@ public class VentanaFacil extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        textoNimbre = new javax.swing.JTextField();
+        textoNombre = new javax.swing.JTextField();
         textoEdad = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         etiquetaInformacion = new javax.swing.JLabel();
@@ -43,9 +44,9 @@ public class VentanaFacil extends javax.swing.JFrame {
 
         jLabel2.setText("Tu edad ");
 
-        textoNimbre.addActionListener(new java.awt.event.ActionListener() {
+        textoNombre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textoNimbreActionPerformed(evt);
+                textoNombreActionPerformed(evt);
             }
         });
 
@@ -68,7 +69,7 @@ public class VentanaFacil extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(textoNimbre))
+                        .addComponent(textoNombre))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGap(18, 18, 18)
@@ -84,7 +85,7 @@ public class VentanaFacil extends javax.swing.JFrame {
                 .addGap(19, 19, 19)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(textoNimbre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(textoNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -99,15 +100,26 @@ public class VentanaFacil extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void textoNimbreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textoNimbreActionPerformed
+    
+    private void textoNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textoNombreActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_textoNimbreActionPerformed
+    }//GEN-LAST:event_textoNombreActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
             // TODO add your handling code here:
-
-            ModeloConexion.conectarse("ruth", "");
+//haremos una inserccion con jdbs a la tabla facil 
+            // paso 1 crear un objeto de tipo conexion 
+            
+          Connection con=  ModeloConexion.conectarse("root", "");
+          //2 con esq conexion invocar un statement preparado
+          PreparedStatement st = con.prepareStatement("insert into FACIL(nombre,edad)values(?,?)");
+          st.setString(1,textoNombre.getText ());
+          st.setInt(2,Integer.parseInt(textoEdad.getText()));
+          st.execute();
+          etiquetaInformacion.setText("Registro insertado");
+          
+          
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
@@ -154,6 +166,6 @@ public class VentanaFacil extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JTextField textoEdad;
-    private javax.swing.JTextField textoNimbre;
+    private javax.swing.JTextField textoNombre;
     // End of variables declaration//GEN-END:variables
 }
